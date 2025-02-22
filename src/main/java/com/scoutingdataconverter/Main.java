@@ -6,7 +6,7 @@ import com.google.zxing.NotFoundException;
 
 public class Main {
     public static void main(String[] args) throws IOException, NotFoundException{
-        System.out.println(com.google.zxing.NotFoundException.getNotFoundInstance());
+        System.out.println(com.google.zxing.NotFoundException.class.getName());
         System.out.println("Hello world!");
         String filepath = "QRTest.png";
         try {
