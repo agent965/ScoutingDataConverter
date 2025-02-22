@@ -1,0 +1,45 @@
+import javax.media.*;
+import javax.media.format.VideoFormat;
+import javax.media.protocol.CaptureDeviceInfo;
+import javax.media.protocol.DataSource;
+import java.awt.*;
+import java.util.Vector;
+
+public class LiveCameraFeed {
+    public static void main(String[] args) {
+        try {
+            // Get available capture devices (camera)
+            Vector<CaptureDeviceInfo> deviceList = CaptureDeviceManager.getDeviceList(new VideoFormat(VideoFormat.RGB));
+
+            if (deviceList == null || deviceList.isEmpty()) {
+                System.out.println("No video capture devices found.");
+                return;
+            }
+
+            // Use the first available device
+            CaptureDeviceInfo device = deviceList.firstElement();
+            MediaLocator mediaLocator = device.getLocator();
+
+            // Create a data source
+            DataSource dataSource = Manager.createDataSource(mediaLocator);
+            
+            // Create a player for the data source
+            Player player = Manager.createRealizedPlayer(dataSource);
+
+            // Create a visual component to display video
+            Component videoComponent = player.getVisualComponent();
+            if (videoComponent != null) {
+                Frame frame = new Frame("Live Camera Feed");
+                frame.setLayout(new BorderLayout());
+                frame.add(videoComponent, BorderLayout.CENTER);
+                frame.setSize(640, 480);
+                frame.setVisible(true);
+                
+                // Start the player
+                player.start();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
